@@ -8,6 +8,10 @@ import (
 	"github.com/osamikoyo/qrk/pkg/loger"
 )
 
+type Deps struct{
+	AssetsFs http.FileSystem
+}
+
 type Handler struct{}
 
 func New() *Handler {
@@ -36,7 +40,8 @@ func (h *Handler) getQR(w http.ResponseWriter, r *http.Request) error {
 	return png.Encode(w, code)
 }
 
-func RegisterRoute(mux *http.ServeMux){
+func RegisterRoute(mux *http.ServeMux, deps Deps){
 	handler := New()
 	mux.Handle("/qr", errorRoute(handler.getQR))
+	mux.Handle("/assets/*", http.StripPrefix("/assets", http.FileServer(deps.AssetsFs)))
 }
