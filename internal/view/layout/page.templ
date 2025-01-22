@@ -1,0 +1,30 @@
+package base
+
+type Props struct{
+    Title string
+}
+
+templ BaseLay(p Props){
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="/assets/main.css"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{p.Title}</title>
+    </head>
+    <body>  
+         @Head()  
+        <script src="/assets/main.js"/>
+        {children...}
+    </body>
+    </html>
+}
+
+templ Head() {
+    <header class="novbar bg-primary text-primary-content" hx-boost="true">
+        <div class="flex-none">
+            <a href="/" class="btn btn-ghost text-xl">Kap</a>
+        </div>
+    </header>
+}

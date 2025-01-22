@@ -43,5 +43,6 @@ func (h *Handler) getQR(w http.ResponseWriter, r *http.Request) error {
 func RegisterRoute(mux *http.ServeMux, deps Deps){
 	handler := New()
 	mux.Handle("/qr", errorRoute(handler.getQR))
+	mux.Handle("/", errorRoute(handler.homePageHandler))
 	mux.Handle("/assets/*", http.StripPrefix("/assets", http.FileServer(deps.AssetsFs)))
 }

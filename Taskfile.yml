@@ -1,5 +1,22 @@
-version : '3'
+version: '3'
 
 tasks:
   build:
-    - go build -o ./bin/app cmd/main.go
+    cmds:
+      - templ generate internal/view
+      - task build-js
+      - task build-css
+      - go build -o ./bin/app cmd/main.go
+  
+  run:
+    cmds:
+      - task build
+      - ./bin/app
+  
+  build-js:
+    cmds:
+      - npm --prefix ./web run build:js
+  
+  build-css:
+    cmds:
+      - npm --prefix ./web run build:css
