@@ -2,6 +2,7 @@ package app
 
 import (
 	"context"
+	"github.com/osamikoyo/qrk/internal/config"
 	"net/http"
 
 	"github.com/osamikoyo/qrk/internal/transtort/handler"
@@ -12,15 +13,19 @@ type App struct{
 	loger loger.Logger
 	server *http.Server
 	mux *http.ServeMux
+	assets string
 }
 
 func Init() App {
+	cfg := config.New()
+
 	return App{
 		loger: loger.New(),
 		server: &http.Server{
-			Addr: "localhost:8080",
+			Addr: cfg.Addr,
 		},
 		mux: http.NewServeMux(),
+		assets: cfg.Assets,
 	}
 }
 
@@ -31,7 +36,7 @@ func (a App) Run(ctx context.Context) {
 		a.server.Shutdown(ctx)
 	}()
 
-	handler.RegisterRoute(a.mux, handler.Deps{AssetsFs: http.Dir("/web/public/assets")})
+	handler.RegisterRoute(a.mux, handler.Deps{AssetsFs: http.Dir(a.assets)})
 
 	a.loger.Info().Msg("Http server started!")
 
